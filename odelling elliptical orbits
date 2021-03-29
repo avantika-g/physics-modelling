@@ -1,0 +1,24 @@
+from vpython import *
+
+scene = canvas(title='modelling elliptical orbits', width=600, height=600, center=vector(5,0,0))
+gd = graph(width=600, height=150, foreground=color.black, background=color.white, xmin= 0 , xmax= 3000, ymin=0, ymax=20)
+f1 = gcurve(color=color.red)
+t = 0
+
+sun = sphere(pos = vec(0,0,0), radius = 100, color = color.orange) #attributes for the sun
+earth = sphere(pos = vec(-200,0,0), radius = 10, color = color.blue, make_trail = True)
+
+earthv = vec(0,0,6) # can change this to create different 'orbit' shapes
+
+while True:
+    rate (100)
+    earth.pos = earth.pos + earthv
+    d = (earth.pos.x**2 + earth.pos.y**2 + earth.pos.z**2)**0.5 #3d vector distance formula
+    radvector = (earth.pos - sun.pos)/d
+    grav_f = -10000*radvector/d**2
+    earthv = earthv + grav_f
+    earth.pos += earthv
+    f1.plot(pos = (t, mag(earthv))) # plotting the graph of the velocity
+    t += 1
+    if d <= sun.radius:
+        break
