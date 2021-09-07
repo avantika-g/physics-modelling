@@ -1,0 +1,33 @@
+from vpython import *
+from math import sin, cos
+
+initHeight = float(input("enter the intitial height of the ball"))
+initVelocity = float(input("enter the intitial velocity of the ball"))
+angle = float(input("enter the angle at which the ball is being launched at in degrees "))
+angle = angle*pi/180
+mass = 1 #can change eg. engine
+gfield = 9.8
+
+display = canvas(title = "modelling projectiles",
+                 x = 0, y = 0, width = 800, height = 600, range = 10,
+                 background = color.white, center = vec(10,initHeight, 0))
+
+table = box(pos=vec(-1,initHeight, 0), size = vec(5, 1, 4))
+projectile = sphere(pos=vec(0,initHeight, 0), radius = 1, color = color.green, make_trail = True)
+
+floor = box(pos = vec(0,0,0), size = vec(10000, 0.25, 10))
+
+t = 0
+dt = 0.01
+
+fgrav = vec(0,-mass*gfield,0) #3d vector for the force ( = ma) of gravity. only works in the y direction
+projectilev = vec(initVelocity*cos(angle), #x component of vector
+             initVelocity*sin(angle), #y component of vector
+             0)
+
+while projectile.pos.y >=  0: #while above ground level
+    rate (100)
+    force = fgrav #can add on additional forces
+    projectilev += (force/mass*dt) # acceleration times change in time
+    projectile.pos += projectilev*dt
+print ("ball1.pos = ", projectile.pos, "t =",t)
